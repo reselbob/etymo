@@ -22,7 +22,7 @@ exports.handler = function handler(event, context, callback){
             try{
                 const data = JSON.parse(res.data).results[0].lexicalEntries[0].entries[0].etymologies[0];
                 console.log({message:"from od-api.oxforddictionaries.com", data});
-                callback(null, data);
+                callback(null, {etymology: data});
             }catch(err){
                 //No data is a problem
                 console.error({message:"error from od-api.oxforddictionaries.com", err});

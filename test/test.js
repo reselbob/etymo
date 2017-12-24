@@ -16,7 +16,8 @@ describe('Basic Tests: ', () => {
                 done(err);
             } else {
                 console.log(data);
-                expect(data).to.an('string');
+                expect(data).to.an('object');
+                expect(data.etymology).to.a('string');
                 done();
             }
         });
