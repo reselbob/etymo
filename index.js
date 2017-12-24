@@ -1,5 +1,4 @@
 'use strict';
-// Or commonjs
 const Swagger = require('swagger-client');
 
 exports.handler = function handler(event, context, callback){
@@ -25,6 +24,7 @@ exports.handler = function handler(event, context, callback){
                 console.log({message:"from od-api.oxforddictionaries.com", data});
                 callback(null, data);
             }catch(err){
+                //No data is a problem
                 console.error({message:"error from od-api.oxforddictionaries.com", err});
                 callback(err);
             }
