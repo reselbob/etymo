@@ -4,7 +4,7 @@
   "description": "A lambda function for gettting the etymology of a word",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "mocha test/test.js"
   },
   "author": "reselbob@gmail.com",
   "license": "MIT",
