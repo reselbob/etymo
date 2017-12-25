@@ -10,7 +10,7 @@ const lambda = require('../index');
 
 describe('Basic Tests: ', () => {
     it('Can run lambda', done => {
-        const event = {word: 'tiger '};
+        const event = {word: 'tiger'};
         lambda.handler(event, context, function (err, data) {
             if (err) {
                 done(err);
@@ -21,7 +21,7 @@ describe('Basic Tests: ', () => {
                 done();
             }
         });
-    });
+    }).timeout(3000);
 
     it('Can cannot run lambda with no word', done => {
         const event = {word: ''};
@@ -31,6 +31,33 @@ describe('Basic Tests: ', () => {
                 expect(err).to.a('error');
                 done();
             } else {
+                done();
+            }
+        });
+    });
+
+    it('Can can get synonyms', done => {
+        const event = {word: 'hazard'};
+        lambda.handler(event, context, function (err, data) {
+            if (err) {
+                done(err);
+            } else {
+                console.log(data);
+                expect(data).to.an('object');
+                expect(data.synonyms).to.an('array');
+                done();
+            }
+        });
+    });
+
+    it('Can can get antonyms', done => {
+        const event = {word: 'happy'};
+        lambda.handler(event, context, function (err, data) {
+            if (err) {
+                done(err);
+            } else {
+                console.log(data);
+                expect(data.antonyms).to.an('array');
                 done();
             }
         });
