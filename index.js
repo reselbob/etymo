@@ -1,10 +1,16 @@
 'use strict';
 const Swagger = require('swagger-client');
 
-exports.handler = function handler(event, context, callback){
+exports.handler = function handler(event, context, callback) {
+    /**************************************************
+     helper function to get values associated with a property
+     @param obj, the object to inspect
+     @param key, the property to search for
+     @param memo, an arbitrary holder variable, just provide a null variable
+     **************************************************/
     function findNested(obj, key, memo) {
-        var i,
-            proto = Object.prototype,
+        let i;
+        const proto = Object.prototype,
             ts = proto.toString,
             hasOwn = proto.hasOwnProperty.bind(obj);
 
@@ -19,13 +25,13 @@ exports.handler = function handler(event, context, callback){
                 }
             }
         }
-
         return memo;
     }
 
-    if(!event.word){
+    if (!event.word) {
         callback(new Error('No word provided. Please provide a word for etymology lookup.'))
-    };
+    }
+    ;
     const url = 'https://od-api.oxforddictionaries.com:443/api/v1/entries/en/' + event.word;
     const synAntUrl = `https://od-api.oxforddictionaries.com:443/api/v1/entries/en/${event.word}/synonyms;antonyms`;
     const headers = {
@@ -42,14 +48,14 @@ exports.handler = function handler(event, context, callback){
     let rtnObj = {};
     Swagger.http(request)
         .then((res) => {
-            try{
+            try {
                 const data = JSON.parse(res.data).results[0].lexicalEntries[0].entries[0].etymologies[0];
-                console.log({message:"from od-api.oxforddictionaries.com", data});
+                console.log({message: "from od-api.oxforddictionaries.com", data});
                 rtnObj.etymology = data;
                 //callback(null, {});
-            }catch(err){
+            } catch (err) {
                 //No data is a problem
-                console.error({message:"error from od-api.oxforddictionaries.com", err});
+                console.error({message: "error from od-api.oxforddictionaries.com", err});
                 callback(err);
             }
             // go get the synonyms and antonyms
@@ -60,7 +66,7 @@ exports.handler = function handler(event, context, callback){
             };
             return Swagger.http(request);
         })
-        .then(res =>{
+        .then(res => {
             const obj = JSON.parse(res.data);
             let memo;
             rtnObj.synonyms = findNested(obj, 'synonyms', memo);
@@ -69,14 +75,14 @@ exports.handler = function handler(event, context, callback){
         })
         .catch((err) => {
             // check to make sure that it's not a not found due to no synonym or antonym
-            if(err.response.status===404 && err.response.url.indexOf('synonyms;antonyms')!== -1){
+            if (err.response.status === 404 && err.response.url.indexOf('synonyms;antonyms') !== -1) {
                 console.log({message: "word not found", word: event.word, url: err.response.url});
-                if(!rtnObj.etymology) rtnObj.etymology = null
-                if(!rtnObj.synonyms) rtnObj.synonyms = null;
-                if(!rtnObj.antonyms) rtnObj.antonyms = null;
-                callback(null,rtnObj);
-            }else{
-                console.log({message:"error from od-api.oxforddictionaries.com", err});
+                if (!rtnObj.etymology) rtnObj.etymology = null
+                if (!rtnObj.synonyms) rtnObj.synonyms = null;
+                if (!rtnObj.antonyms) rtnObj.antonyms = null;
+                callback(null, rtnObj);
+            } else {
+                console.log({message: "error from od-api.oxforddictionaries.com", err});
                 callback(err);
             }
         })
