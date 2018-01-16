@@ -7,12 +7,12 @@ The purpose of the application is to demonstrate how to create a facade API that
 
 ``npm install``
 
-##Required environment variables
+## Required environment variables
 
 - `APP_ID`, the application ID provided OxfordDictionaries.com, upon registration
 - `API_KEY`, the api key token provided by OxfordDictionaries.com, upon registration
 
-##Testing
+## Testing
 
 ``npm test``
 
