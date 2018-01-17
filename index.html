@@ -29,12 +29,15 @@
         etymology.innerHTML = data.etymology || "unknown";
     };
     function showEtymo(){
+        displayEtymo({word: 'test', etymology: 'test etymology'}); return;
+        /*
         var word = document.getElementById("word").value;
         var url = baseUrl + word;
         //alert('I am searching: ' + uri);
         $.get(url, function (data) {
             displayEtymo(data);
         });
+        */
     };
 </script>
 
